@@ -59,7 +59,7 @@ export default function DebugPage() {
               </div>
               <div className="p-3 bg-secondary rounded-lg">
                 <p className="font-semibold text-foreground mb-1">User ID:</p>
-                <p className="text-muted-foreground font-mono text-sm break-all">{user ? user.uid : "None"}</p>
+                <p className="text-muted-foreground font-mono text-sm break-all">{user ? user.id : "None"}</p>
               </div>
               <div className="p-3 bg-secondary rounded-lg">
                 <p className="font-semibold text-foreground mb-1">Profile:</p>
