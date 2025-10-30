@@ -25,12 +25,21 @@ export default function ManageTeamPage() {
 
   const fetchTeamMembers = async () => {
     try {
-      const { data, error } = await supabase
+      setLoading(true)
+      
+      // Add timeout protection
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timeout')), 10000)
+      )
+      
+      const queryPromise = supabase
         .from("users")
         .select("id, name, email, join_date")
         .eq("role", "member")
         .neq("status", "Deleted")
         .order("name")
+
+      const { data, error } = await Promise.race([queryPromise, timeoutPromise]) as any
 
       if (error) throw error
 
@@ -42,8 +51,10 @@ export default function ManageTeamPage() {
       }))
 
       setMembers(teamData)
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching team members:", error)
+      alert(`Failed to load team members: ${error.message}. Please refresh the page.`)
+      setMembers([]) // Set empty array on error
     } finally {
       setLoading(false)
     }
